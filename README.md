@@ -46,3 +46,5 @@ Aggiornamenti di ciò che viene fatto al processo per mantenere la tracciabilit�
 - testati primi prototipi per file di xml/xsd per gestire e validare dati università
 
 - test semplice file in java per la lettura di un file xml, che mostra l'abero degl'elementi presenti
+
+- test_server_client_1 -> un client si collega ad un server TDP, che lo reindirizza ad un thread che gli inviera il nome di tutti i nodi presenti nel file xml 
