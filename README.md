@@ -37,6 +37,8 @@ Per domande o commenti, contattami all'indirizzo email [vaccaroandrea1227@gmail.
 
 # Aggiornamenti
 
+Aggiornamenti di ciò che viene fatto al processo per mantenere la tracciabilità di aggiornamenti/risoluzione criticità del programma
+
 ## 29/02/2024
 
 - creata cartella XML/XSD e JAVA
