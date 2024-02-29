@@ -36,9 +36,6 @@ public class test_thread extends Thread {
             Document document = builder.parse(fileInputStream);
             fileInputStream.close();
 
-            // Get the root element
-            Element rootElement = document.getDocumentElement();
-
             // Convert the XML document to a string
             String xmlString = convertDocumentToString(document);
 
