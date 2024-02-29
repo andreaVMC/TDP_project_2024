@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Universita>
+    <corso codice="1">
+        <nome_corso>Informatica 1</nome_corso>
+        <anno>2019</anno>
+        <crediti>180</crediti>
+        <professore codice="1">
+            <nome>Giuseppe</nome>
+            <cognome>De Marco</cognome>
+            <materia>Programmazione</materia>
+            <data_nascita>1970-01-01</data_nascita>
+            <email>prof@gmail.com</email>
+        </professore>
+
+        <studenti>
+
+            <studente matricola="123456">
+                <nome>Mario</nome>
+                <cognome>Rossi</cognome>
+                <data_nascita>1990-01-01</data_nascita>
+                <citta_nascita>Roma</citta_nascita>
+                <sesso>M</sesso>
+                <email>blabla@gmail.com</email>
+                <stato_corso>terminato</stato_corso>
+                <voto>30</voto>
+            </studente>
+
+            <studente matricola="654321">
+                <nome>Giovanna</nome>
+                <cognome>Bianchi</cognome>
+                <data_nascita>1992-05-10</data_nascita>
+                <citta_nascita>Milano</citta_nascita>
+                <sesso>F</sesso>
+                <email>giovanna.bianchi@gmail.com</email>
+                <stato_corso>non terminato</stato_corso>
+            </studente>
+
+        </studenti>
+    </corso>
+
+    <corso codice="2">
+        <nome_corso>Informatica 2</nome_corso>
+        <anno>2020</anno>
+        <crediti>150</crediti>
+        <professore codice="2">
+            <nome>Maria</nome>
+            <cognome>Rossi</cognome>
+            <materia>Algoritmi</materia>
+            <data_nascita>1980-02-15</data_nascita>
+            <email>prof2@gmail.com</email>
+        </professore>
+
+        <studenti>
+
+            <studente matricola="789012">
+                <nome>Luca</nome>
+                <cognome>Verdi</cognome>
+                <data_nascita>1991-07-20</data_nascita>
+                <citta_nascita>Napoli</citta_nascita>
+                <sesso>M</sesso>
+                <email>luca.verdi@gmail.com</email>
+                <stato_corso>terminato</stato_corso>
+                <voto>28</voto>
+            </studente>
+
+            <studente matricola="345678">
+                <nome>Sara</nome>
+                <cognome>Russo</cognome>
+                <data_nascita>1993-11-05</data_nascita>
+                <citta_nascita>Palermo</citta_nascita>
+                <sesso>F</sesso>
+                <email>sara.russo@gmail.com</email>
+                <stato_corso>non terminato</stato_corso>
+            </studente>
+
+        </studenti>
+    </corso>
+</Universita>
