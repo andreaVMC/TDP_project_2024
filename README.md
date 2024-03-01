@@ -48,3 +48,8 @@ Aggiornamenti di ciò che viene fatto al processo per mantenere la tracciabilit�
 - test semplice file in java per la lettura di un file xml, che mostra l'abero degl'elementi presenti
 
 - test_server_client_1 -> un client si collega ad un server TDP, che lo reindirizza ad un thread che gli inviera il nome di tutti i nodi presenti nel file xml 
+
+## 01/03/2024
+
+- menu nel thread server per gestione richiesta client -> prossimo passo implementare tutte le possibili opzioni attraverso funzioni
+- <span style="color:#ff3333">bug: la stringa ricevuta dal client contiene una sotto stringa costante di caratteri errati: "??♣t☻"</span> -> da risolvere

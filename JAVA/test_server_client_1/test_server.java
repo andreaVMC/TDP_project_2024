@@ -17,7 +17,7 @@ public class test_server {
                 Socket clientSocket = serverSocket.accept();
 
                 // Handle client request in a separate thread
-                test_thread thread = new test_thread("XML_XSD/test_dati_1.xml", clientSocket.getOutputStream());
+                test_thread thread = new test_thread("XML_XSD/test_dati_1.xml", clientSocket.getOutputStream(), clientSocket.getInputStream());
                 thread.start();
             }
 
