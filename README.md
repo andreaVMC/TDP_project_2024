@@ -52,4 +52,4 @@ Aggiornamenti di ciò che viene fatto al processo per mantenere la tracciabilit�
 ## 01/03/2024
 
 - menu nel thread server per gestione richiesta client -> prossimo passo implementare tutte le possibili opzioni attraverso funzioni
-- bug: la stringa ricevuta dal client contiene una sotto stringa costante di caratteri errati: "??♣t☻" -> da risolvere
+- <span style="color:#ff3333">bug: la stringa ricevuta dal client contiene una sotto stringa costante di caratteri errati: "??♣t☻"</span> -> da risolvere
