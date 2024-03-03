@@ -33,6 +33,17 @@ Questo progetto è distribuito con la licenza MIT. Per ulteriori informazioni, c
 
 Per domande o commenti, contattami all'indirizzo email [vaccaroandrea1227@gmail.com](mailto:vaccaroandrea1227@gmail.com).
 
+## To-Do list
+
+- [x] Prototipo file xml con xsd validatore.
+- [x] Programma che legge file xml.
+- [x] Server e Client TCP ed inviare file xml al client.
+- [x] Gestire client con thread.
+- [x] Creare menu nel Thread per gestire richieste client.
+- [ ] Creazione file richiesta del client.
+- [ ] Invio e ricezione del file richiesta.
+- [ ] Interfaccia JavaSwing Server e Client.
+
 ----------------------------
 
 # Aggiornamenti
