@@ -70,7 +70,6 @@ public class test_thread extends Thread {
                 objectOutputStream.close();
             }
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
