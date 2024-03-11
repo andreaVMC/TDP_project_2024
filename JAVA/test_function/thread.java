@@ -1,23 +1,16 @@
 package JAVA.test_function;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-
-
+import java.io.*;
+import java.net.*;
 
 @SuppressWarnings("unused")
 public class thread extends Thread {
-    private final String filePath;
-    private final OutputStream outputStream;
-    private final InputStream inputStream;
+    private String filePath;
+    private Socket client;
 
-    public thread(String filePath, OutputStream outputStream, InputStream inputStream) {
+    public thread(String filePath, Socket client) throws IOException {
         this.filePath = filePath;
-        this.outputStream = outputStream;
-        this.inputStream = inputStream;
+        this.client = client;
     }
 
     @Override
@@ -25,35 +18,17 @@ public class thread extends Thread {
         //mandare messaggio al client
         sendString("io\nsono");
         //ricevere messaggio dal client
+        sendString("tu\nsei");
     }
 
-
-    private void sendString(String message) { //da fare anche per client
+    private void sendString(String message) {
         try {
-            PrintWriter printWriter = new PrintWriter(this.outputStream);
-            printWriter.println(message);
-            printWriter.flush();
-            printWriter.close();
-        } catch (Exception e) {
+            OutputStream outputStream = client.getOutputStream();
+            outputStream.write(message.getBytes());
+            outputStream.flush();
+            System.out.println("Message sent");
+        } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    private static String receiveString(InputStream inputStream) {
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream)); //non inzializzare ogni volta (riguardare acche client)
-
-            String line;
-            String box="";
-
-            while ((line = reader.readLine()) != null) {
-                box += line+'\n';
-            }
-
-            return box;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
         }
     }
 }

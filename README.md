@@ -69,3 +69,4 @@ Aggiornamenti di ci√≤ che viene fatto al processo per mantenere la tracciabilit√
 
 - aggiunto "CONSEGNA.md"
 - nuovi file per creare e testare tutte le funzioni necessarie per il programma
+- rallentami nel progetto dovuti a problemi di codice ed interpretazione di esso, da revisionare in maniera categoria

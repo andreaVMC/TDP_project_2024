@@ -6,47 +6,34 @@ import java.net.Socket;
 
 @SuppressWarnings("unused")
 public class client {
+    static Socket socket;
     public static void main(String[] args) {
         try {
             // Connect to localhost on port 8080
-            Socket socket = new Socket("localhost", 8080);
+            socket = new Socket("localhost", 8080);
             System.out.println("connessione avvenuta\n");
             
             //ricevere messaggi dal server
             System.out.println(receiveString(socket.getInputStream()));
+            System.out.println("--------------------");
+            System.out.println(receiveString(socket.getInputStream()));
             //mandare messaggi al server
 
-
-
-            //chiudo la connessione
-            socket.close();
         } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void sendString(String message, OutputStream outputStream) {
-        try {
-            outputStream.write(message.getBytes());
-            outputStream.flush();
-        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private static String receiveString(InputStream inputStream) {
         try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-
-            String line;
-            String box="";
-
-            while ((line = reader.readLine()) != null) {
-                box += line+'\n';
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            byte[] data = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = inputStream.read(data, 0, data.length)) != -1) {
+                buffer.write(data, 0, bytesRead);
             }
-
-            return box;
-        } catch (Exception e) {
+            return buffer.toString("UTF-8");
+        } catch (IOException e) {
             e.printStackTrace();
             return null;
         }
