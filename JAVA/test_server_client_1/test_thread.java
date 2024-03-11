@@ -37,8 +37,8 @@ public class test_thread extends Thread {
             String inputString = reader.readLine();
 
             
-            if(inputString.equals("dati")){
-                try {
+            if(inputString.equals("query")){
+                /*try {
                     // Read the XML file
                     File file = new File(filePath);
                     FileInputStream fileInputStream = new FileInputStream(file);
@@ -59,15 +59,19 @@ public class test_thread extends Thread {
                 } catch (IOException | javax.xml.parsers.ParserConfigurationException | org.xml.sax.SAXException e) {
                     e.printStackTrace();
 
-                }
-            }else{
-                String xmlString = "ok";
+                }*/
+            }else if(inputString.equals("append")){ 
+                /*String xmlString = "ok";
 
                 // Send the XML string to the client
                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
                 objectOutputStream.writeObject(xmlString);
                 objectOutputStream.flush();
-                objectOutputStream.close();
+                objectOutputStream.close();*/
+            }else if(inputString.equals("delete")){
+
+            }else{
+                return;
             }
         } catch (IOException e) {
             e.printStackTrace();
