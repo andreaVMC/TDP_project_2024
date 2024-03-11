@@ -1,10 +1,10 @@
-package JAVA.test_server_client_1;
+package JAVA.test_function;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class test_server {
+public class server {
     public static void main(String[] args) {
         // Create a ServerSocket object
         ServerSocket serverSocket = null;
@@ -18,7 +18,7 @@ public class test_server {
                 Socket clientSocket = serverSocket.accept();
 
                 // Handle client request in a separate thread
-                test_thread thread = new test_thread("XML_XSD/test_dati_1.xml", clientSocket.getOutputStream(), clientSocket.getInputStream());
+                thread thread = new thread("XML_XSD/test_dati_1.xml", clientSocket.getOutputStream(), clientSocket.getInputStream());
                 System.out.println("connessione avvenuta");
                 thread.start();
             }

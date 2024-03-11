@@ -64,3 +64,8 @@ Aggiornamenti di ciò che viene fatto al processo per mantenere la tracciabilit�
 
 - menu nel thread server per gestione richiesta client -> prossimo passo implementare tutte le possibili opzioni attraverso funzioni
 - bug: la stringa ricevuta dal client contiene una sotto stringa costante di caratteri errati: "??♣t☻" -> da risolvere
+
+## 11/03/2024
+
+- aggiunto "CONSEGNA.md"
+- nuovi file per creare e testare tutte le funzioni necessarie per il programma

@@ -6,8 +6,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -15,6 +16,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import java.io.BufferedWriter;
 
 
 
@@ -22,63 +24,54 @@ public class test_thread extends Thread {
     private final String filePath;
     private final OutputStream outputStream;
     private final InputStream inputStream;
+    private final BufferedReader reader;
+    private final BufferedWriter writer;
 
     public test_thread(String filePath, OutputStream outputStream2, InputStream inputStream2) {
         this.filePath = filePath;
         this.outputStream = outputStream2;
         this.inputStream = inputStream2;
+        this.reader = new BufferedReader(new InputStreamReader(inputStream));
+        this.writer = new BufferedWriter(new OutputStreamWriter(outputStream2));
     }
 
     @Override
     public void run() {
+        //code
+        sendString("ciao");
+        System.out.println("stringa mandata");
+    }
 
-        // Read the input string from the client
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-            String inputString = reader.readLine();
-
-            
-            if(inputString.equals("query")){
-                /*try {
-                    // Read the XML file
-                    File file = new File(filePath);
-                    FileInputStream fileInputStream = new FileInputStream(file);
-                    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-                    DocumentBuilder builder = factory.newDocumentBuilder();
-                    Document document = builder.parse(fileInputStream);
-                    fileInputStream.close();
-
-                    // Convert the XML document to a string
-                    String xmlString = convertDocumentToString(document);
-
-                    // Send the XML string to the client
-                    ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-                    objectOutputStream.writeObject(xmlString);
-                    objectOutputStream.flush();
-                    objectOutputStream.close();
-
-                } catch (IOException | javax.xml.parsers.ParserConfigurationException | org.xml.sax.SAXException e) {
-                    e.printStackTrace();
-
-                }*/
-            }else if(inputString.equals("append")){ 
-                /*String xmlString = "ok";
-
-                // Send the XML string to the client
-                ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-                objectOutputStream.writeObject(xmlString);
-                objectOutputStream.flush();
-                objectOutputStream.close();*/
-            }else if(inputString.equals("delete")){
-
-            }else{
-                return;
-            }
-        } catch (IOException e) {
+    private boolean sendString(String message) {
+        try{
+            this.writer.write(message, 0, message.length());
+            this.writer.flush();
+            return true;
+        } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
     }
 
-    private String convertDocumentToString(Document document) {
+    String recieveString() {
+        String box="",inputString="";
+        try {
+            while((box=reader.readLine())!=null){
+                inputString+=box;
+            }
+            System.out.println(inputString);
+            return inputString;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "error";
+        }
+    }
+
+
+
+
+
+    /*private String convertDocumentToString(Document document) {
         StringBuilder stringBuilder = new StringBuilder();
         NodeList nodeList = document.getElementsByTagName("*");
         for (int i = 0; i < nodeList.getLength(); i++) {
@@ -89,5 +82,5 @@ public class test_thread extends Thread {
             }
         }
         return stringBuilder.toString();
-    }
+    }*/
 }
