@@ -19,9 +19,17 @@ public class client {
             do{
                 System.out.println(recieveString());
                 selection=menu_selection();
-            }while(true);
+                System.out.println(selection);
+            }while(selection!=0);
             
 
+            // Close the connection
+            System.out.println("chiusura connessione");
+            try {
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -33,7 +41,7 @@ public class client {
             InputStream inputStream = socket.getInputStream();
             byte[] data = new byte[1024];
             inputStream.read(data);
-            return new String(data);
+            return new String(data).trim();
         } catch (IOException e) {
             e.printStackTrace();
             return null;

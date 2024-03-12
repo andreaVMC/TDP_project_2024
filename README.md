@@ -40,7 +40,12 @@ Per domande o commenti, contattami all'indirizzo email [vaccaroandrea1227@gmail.
 - [x] Server e Client TCP ed inviare file xml al client.
 - [x] Gestire client con thread.
 - [x] Creare menu nel Thread per gestire richieste client.
-- [ ] Creazione file richiesta del client.
+- [ ] Creazione file richiesta del client (query).
+- [ ] implementazione append.
+- [ ] implementazione edit.
+- [ ] implementazione delete.
+- [ ] implementare campo password nel file XML ed XSD. 
+- [ ] implementare metodo di autenticazione via codice e password controllati nei dati xml.
 - [ ] Invio e ricezione del file richiesta.
 - [ ] Interfaccia JavaSwing Server e Client.
 
@@ -70,3 +75,9 @@ Aggiornamenti di ci√≤ che viene fatto al processo per mantenere la tracciabilit√
 - aggiunto "CONSEGNA.md"
 - nuovi file per creare e testare tutte le funzioni necessarie per il programma
 - rallentami nel progetto dovuti a problemi di codice ed interpretazione di esso, da revisionare in maniera categoria
+
+## 12/03/2024
+
+- aggiunto un nuovo draft per gestione di comunicazione
+- cambiato metodo di comunicazione da Stringa a buffer di Byte con casting
+- creata interfaccia di menu

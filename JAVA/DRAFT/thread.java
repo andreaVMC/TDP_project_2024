@@ -19,8 +19,17 @@ public class thread extends Thread {
         int selection = 0;
         do{
             selection = menu();
-            System.out.println("ooooo "+selection);
+            System.out.println(selection);
         }while(selection!=0);
+
+
+        // Close the connection
+        System.out.println("chiusura connessione");
+        try {
+            client.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -42,7 +51,7 @@ public class thread extends Thread {
             InputStream inputStream = client.getInputStream();
             byte[] data = new byte[1024];
             inputStream.read(data);
-            return new String(data);
+            return new String(data).trim(); //aggiunto trim per eliminare gli spazi bianchi -> controllare se funziona
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -50,26 +59,20 @@ public class thread extends Thread {
     }
 
     private int menu() {
-        String message = "query: fai una richiesta\nappend: aggiugni dati\nedit: modifica dati \ndelete:cancella dati \nexit: chiudi la connessione";
+        String message = "MENU:\nquery: fai una richiesta\nappend: aggiugni dati\nedit: modifica dati \ndelete:cancella dati \nexit: chiudi la connessione";
         String selection="";
         do {
             sendMessage(message);
             selection = recieveString(); //il messaggio ricevuto è una stringa che pero ha sempre lunghezza di 1024 come il buffer di byte, quindi non è totalmente la stessa cosa
-            String ciao = new String(selection);
             if (selection.equals("query")) {
-                System.out.println("selection blabla:"+selection);
                 return 1;
             } else if (selection.equals("append")) {
-                System.out.println("selection blabla:"+selection);
                 return 2;
             } else if (selection.equals("edit")) {
-                System.out.println("selection blabla:"+selection);
                 return 3;
             } else if (selection.equals("delete")) {
-                System.out.println("selection blabla:"+selection);
                 return 4;
             } else if (selection.equals("exit")) {
-                System.out.println("selection blabla:"+selection);
                 return 0;
             }
         } while (true);
