@@ -40,6 +40,8 @@ Per domande o commenti, contattami all'indirizzo email [vaccaroandrea1227@gmail.
 - [x] Server e Client TCP ed inviare file xml al client.
 - [x] Gestire client con thread.
 - [x] Creare menu nel Thread per gestire richieste client.
+- [ ] Aggiungere funzionalità query multi corso/prof/studente
+- [ ] Aggiungere controllo su campi richiesti da client (correttezza nominativi) e ripetitività dei campi
 - [ ] Creazione file richiesta del client (query).
 - [ ] implementazione append.
 - [ ] implementazione edit.
@@ -81,3 +83,5 @@ Aggiornamenti di ciò che viene fatto al processo per mantenere la tracciabilit�
 - aggiunto un nuovo draft per gestione di comunicazione
 - cambiato metodo di comunicazione da Stringa a buffer di Byte con casting
 - creata interfaccia di menu
+- create funzione per gestione di query (non complete) sul file xml -> da implementare richiesta di più corsi/professori/studenti
+- creata funzione per la scrittura di un file query.xml contente le informazioni richieste dal client

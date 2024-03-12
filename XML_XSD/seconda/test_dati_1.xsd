@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:element name="Universita">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="corso" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="nome_corso" type="xs:string"/>
+                            <xs:element name="anno" type="xs:integer"/>
+                            <xs:element name="crediti" type="xs:integer"/>
+                            <xs:element name="professore">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="nome" type="xs:string"/>
+                                        <xs:element name="cognome" type="xs:string"/>
+                                        <xs:element name="materia" type="xs:string"/>
+                                        <xs:element name="data_nascita" type="xs:date"/>
+                                        <xs:element name="email">
+                                            <xs:simpleType>
+                                                <xs:restriction base="xs:string">
+                                                    <xs:pattern value="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}"/>
+                                                </xs:restriction>
+                                            </xs:simpleType>
+                                        </xs:element>
+                                        <xs:element name="password" type="xs:string"/>
+                                    </xs:sequence>
+                                    <xs:attribute name="codice" type="xs:integer"/>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="studenti" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="studente" maxOccurs="unbounded">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="nome" type="xs:string"/>
+                                                    <xs:element name="cognome" type="xs:string"/>
+                                                    <xs:element name="data_nascita" type="xs:date"/>
+                                                    <xs:element name="citta_nascita" type="xs:string"/>
+                                                    <xs:element name="sesso" type="xs:string"/>
+                                                    <xs:element name="email">
+                                                        <xs:simpleType>
+                                                            <xs:restriction base="xs:string">
+                                                                <xs:pattern value="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}"/>
+                                                            </xs:restriction>
+                                                        </xs:simpleType>
+                                                    </xs:element>
+                                                    <xs:element name="stato_corso" type="xs:string"/>
+                                                    <xs:element name="voto" type="xs:integer" minOccurs="0"/>
+                                                    <xs:element name="password" type="xs:string"/>
+                                                </xs:sequence>
+                                                <xs:attribute name="matricola" type="xs:integer"/>
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="codice" type="xs:integer"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

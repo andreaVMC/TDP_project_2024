@@ -17,7 +17,7 @@ public class server {
                 Socket clientSocket = serverSocket.accept();
 
                 // Handle client request in a separate thread
-                thread thread = new thread("XML_XSD/test_dati_1.xml", clientSocket);
+                thread thread = new thread("XML_XSD/seconda/test_dati_1.xml", clientSocket);
                 System.out.println("connessione avvenuta");
                 thread.start();
             }

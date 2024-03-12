@@ -16,6 +16,7 @@ che avrà come figli i contenuti dell’elemento richiesto.
 5. Il client può aggiungere dati alla raccolta del file XML (Es: aggiungo un nuovo libro),
 che dovrà comunque rispettare la struttura e le eventuali restrizioni dettate dallo
 schema. Il server dovrà poi salvare il documento modificato.
+
 Sarà poi necessario svolgere una presentazione di 15 minuti per spiegare il lavoro fatto.
 
 ## La valutazione sarà fatta su:

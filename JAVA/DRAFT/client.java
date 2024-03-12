@@ -19,7 +19,6 @@ public class client {
             do{
                 System.out.println(recieveString());
                 selection=menu_selection();
-                System.out.println(selection);
             }while(selection!=0);
             
 
@@ -70,6 +69,7 @@ public class client {
             switch (selection) {
                 case "query":
                     sendString(selection);
+                    query();
                     return 1;
                 case "append":
                     sendString(selection);
@@ -88,5 +88,72 @@ public class client {
                     break;
             }
         } while (true);
+    }
+
+    @SuppressWarnings("resource")
+    private static void query() {
+        Scanner input = new Scanner(System.in);
+        String message;
+        String box;
+
+        System.out.println(recieveString()); //inserisci cod-corso
+        message = input.nextLine();
+        sendString(message);
+
+        System.out.println(recieveString()+"\n(exit for stop)"); //inserisci campi-corso
+        message="";
+        do {
+            box = input.nextLine();
+            if (!box.equals("exit")) {
+                message += box + ",";
+            }
+        } while (!box.equals("exit"));
+        if(message.equals("")) message="0";
+        sendString(message); //campi corso richiesti
+        
+        /*----------- */
+        
+        System.out.println(recieveString()+"(no-need fore none)"); //inserisci cod-prof
+        message = input.nextLine();
+        if(message.equals("no-need")){
+            sendString("0");
+        }else{
+            sendString(message);
+
+            System.out.println(recieveString()+"\n(exit for stop)"); //inserisci campi-prof
+            message="";
+            do {
+                box = input.nextLine();
+                if (!box.equals("exit")) {
+                    message += box + ",";
+                }
+            } while (!box.equals("exit"));
+            if(message.equals("")) message="0";
+            sendString(message); //campi prof richiesti
+        }
+
+        //----------------
+
+        System.out.println(recieveString()+"(no-need fore none)"); //inserisci matricola studente
+        message = input.nextLine();
+        if(message.equals("no-need")){
+            sendString("0");
+        }else{
+            sendString(message);
+
+            System.out.println(recieveString()+"\n(exit for stop)"); //inserisci campi studente
+            message="";
+            do {
+                box = input.nextLine();
+                if (!box.equals("exit")) {
+                    message += box + ",";
+                }
+            } while (!box.equals("exit"));
+            if(message.equals("")) message="0";
+            sendString(message); //campi studente richiesti
+        }
+
+        
+        
     }
 }
