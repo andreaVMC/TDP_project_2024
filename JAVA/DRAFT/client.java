@@ -47,6 +47,22 @@ public class client {
         }
     }
 
+    public static void recieveFile(String nomeFile){
+        try {
+            InputStream inputStream = socket.getInputStream();
+            FileOutputStream fileOutputStream = new FileOutputStream(nomeFile);
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                fileOutputStream.write(buffer, 0, bytesRead);
+            }
+            fileOutputStream.close();
+            return;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static boolean sendString(String message){
         try {
             byte[] data = message.getBytes();
@@ -153,7 +169,8 @@ public class client {
             sendString(message); //campi studente richiesti
         }
 
-        
-        
+        recieveFile("risultato.xml");
+        sendString("ok");
+        return; //problema non va a ristampare il menu
     }
 }

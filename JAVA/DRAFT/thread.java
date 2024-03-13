@@ -276,11 +276,16 @@ public class thread extends Thread {
 
         List<String> elementsStudente = identificaNode(codCorso, "0", codStudente, campiStudente);
 
-        createFileQuery(codCorso, codProf, campiStudente, campiCorso, campiProf, campiStudente, elementsCorso, elementsProf, elementsStudente);
+        sendMessage(createFileQuery(codCorso, codProf, campiStudente, campiCorso, campiProf, campiStudente, elementsCorso, elementsProf, elementsStudente));
 
+        if(recieveString().equals("ok")){
+            System.out.println("file inviato correttamente");
+        }else{
+            System.out.println("errore nell'invio del file");
+        }
     }
 
-    private void createFileQuery(String codCorso, String codProf, String matricola, String campoCorso, String campoProf, String campoStudente,List<String> elementsCorso, List<String> elementsProf, List<String> elementsStudente){
+    private File createFileQuery(String codCorso, String codProf, String matricola, String campoCorso, String campoProf, String campoStudente,List<String> elementsCorso, List<String> elementsProf, List<String> elementsStudente){
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
         
@@ -339,20 +344,23 @@ public class thread extends Thread {
                 rootElement.appendChild(corso);
             }
             // Save the document to a file or perform other operations
+            File fileRichiesta = new File("query.xml");
 
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(new File("query.xml"));
+            StreamResult result = new StreamResult(fileRichiesta);
 
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "5");
             
             transformer.transform(source, result);
         
+            return fileRichiesta;
         } catch (ParserConfigurationException | TransformerException e) {
             e.printStackTrace();
             
         }
+        return null;
     }
 }
