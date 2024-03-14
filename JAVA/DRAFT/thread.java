@@ -95,7 +95,7 @@ public class thread extends Thread {
     }
 
     private int menu() {
-        String message = "\n\nMENU:\nquery: fai una richiesta\nappend: aggiugni dati\nedit: modifica dati \ndelete:cancella dati \nexit: chiudi la connessione";
+        String message = "\n\nMENU:\nlog_in: effettua l'accesso\nlog_out: esci dall'account\nquery: fai una richiesta\nappend: aggiugni dati\nedit: modifica dati \ndelete:cancella dati \nexit: chiudi la connessione";
         String selection="";
         do {
             sendMessage(message);
@@ -109,8 +109,20 @@ public class thread extends Thread {
                 return 3;
             } else if (selection.equals("delete")) {
                 return 4;
+            } else if (selection.equals("log_in")) {
+                if(log_in()){
+                    sendMessage("autenticato");
+                }else{
+                    sendMessage("non_autenticato");
+                }
+                return 5;
+            } else if (selection.equals("log_out")) {
+                return 6;
             } else if (selection.equals("exit")) {
                 return 0;
+            }else if (selection.equals("none")) {
+                System.out.println("entered");
+                continue;
             }
         } while (true);
     }
@@ -134,7 +146,6 @@ public class thread extends Thread {
         Node corso=null;
         String[] campi=null;
         List<String> elements = new ArrayList<>();
-
         if (!campo.equals("0")) {
             campi = campo.split(",");
         }
@@ -230,11 +241,11 @@ public class thread extends Thread {
     private String getElementsNode(int select){ //restituisce tutti gli elementi di un nodo , 1=corso, 2=professore, 3=studente
         Element root=getRoot();
         if (select==1){
-            return "nome_corso\nanno\ncrediti";
+            return "nome_corso,anno,crediti";
         }else if(select==2){
-            return "nome\ncognome\nmateria\ndata_nascita\nemail\npassword";
+            return "nome,cognome,materia,data_nascita,email,password";
         }else if(select==3){
-            return "nome\ncognome\ndata_nascita\ncitta_nascita\nsesso\nemail\nstato_corso\nvoto\npassword";
+            return "nome,cognome,data_nascita,citta_nascita,sesso,email,stato_corso,voto,password";
         }else{
             return "errore";
         }
@@ -244,14 +255,14 @@ public class thread extends Thread {
         sendMessage("Inserisci il codice del corso:\n");
         String codCorso = recieveString();
 
-        sendMessage("inserisci campi corso:\n"+getElementsNode(1));
+        sendMessage(getElementsNode(1));
         String campiCorso = recieveString();
 
         sendMessage("Inserisci il codice del professore:\n");
         String codProf = recieveString();
         String campiProf="";
         if(!codProf.equals("0")){
-            sendMessage("inserisci campi professore:\n"+getElementsNode(2));
+            sendMessage(getElementsNode(2));
             campiProf = recieveString();
         }else{
             campiProf="0";
@@ -261,7 +272,7 @@ public class thread extends Thread {
         String codStudente = recieveString();
         String campiStudente="";
         if(!codStudente.equals("0")){
-            sendMessage("inserisci campi professore:\n"+getElementsNode(3));
+            sendMessage(getElementsNode(3));
             campiStudente = recieveString();
         }else{
             campiStudente="0";
@@ -276,7 +287,7 @@ public class thread extends Thread {
 
         List<String> elementsStudente = identificaNode(codCorso, "0", codStudente, campiStudente);
 
-        sendMessage(createFileQuery(codCorso, codProf, campiStudente, campiCorso, campiProf, campiStudente, elementsCorso, elementsProf, elementsStudente));
+        sendMessage(createFileQuery(codCorso, codProf, codStudente, campiCorso, campiProf, campiStudente, elementsCorso, elementsProf, elementsStudente));
 
         if(recieveString().equals("ok")){
             System.out.println("file inviato correttamente");
@@ -313,30 +324,36 @@ public class thread extends Thread {
             if(!codCorso.equals("0")){
                 Element corso = doc.createElement("corso");
                 corso.setAttribute("codice", codCorso);
-                for (int i = 0; i < campiCorso.length; i++) {
-                    Element campo = doc.createElement(campiCorso[i]);
-                    campo.appendChild(doc.createTextNode(elementsCorso.get(i)));
-                    corso.appendChild(campo);
+                if(campiCorso!=null){
+                    for (int i = 0; i < campiCorso.length; i++) {
+                        Element campo = doc.createElement(campiCorso[i]);
+                        campo.appendChild(doc.createTextNode(elementsCorso.get(i)));
+                        corso.appendChild(campo);
+                    }
                 }
 
                 if(!codProf.equals("0")){
                     Element prof = doc.createElement("professore");
                     prof.setAttribute("codice", codProf);
-                    for (int i = 0; i < campiProf.length; i++) {
-                        Element campo = doc.createElement(campiProf[i]);
-                        campo.appendChild(doc.createTextNode(elementsProf.get(i)));
-                        prof.appendChild(campo);
+                    if(campiProf!=null){
+                        for (int i = 0; i < campiProf.length; i++) {
+                            Element campo = doc.createElement(campiProf[i]);
+                            campo.appendChild(doc.createTextNode(elementsProf.get(i)));
+                            prof.appendChild(campo);
+                        }
                     }
                     corso.appendChild(prof);
                 }
 
-                if(!matricola.equals("0")){
-                   Element studente = doc.createElement("studente");
+                if(!matricola.equals("0") ){
+                    Element studente = doc.createElement("studente");
                     studente.setAttribute("matricola", matricola);
-                    for (int i = 0; i < campiStudente.length; i++) {
-                        Element campo = doc.createElement(campiStudente[i]);
-                        campo.appendChild(doc.createTextNode(elementsStudente.get(i)));
-                        studente.appendChild(campo);
+                    if(campiStudente!=null){
+                        for (int i = 0; i < campiStudente.length; i++) {
+                            Element campo = doc.createElement(campiStudente[i]);
+                            campo.appendChild(doc.createTextNode(elementsStudente.get(i)));
+                            studente.appendChild(campo);
+                        }
                     }
                     corso.appendChild(studente);
                 }
@@ -362,5 +379,69 @@ public class thread extends Thread {
             
         }
         return null;
+    }
+
+    private boolean log_in() {
+        String role=recieveString();
+        String cod=recieveString();
+        String password = recieveString();
+    
+
+        Element root = getRoot();
+        NodeList lista = root.getChildNodes();
+
+        for(int i=0;i<lista.getLength();i++){
+            //controlla se l'elemento della lista è un elemento corso
+            Node node=lista.item(i);
+            if(node.getNodeType()==Node.ELEMENT_NODE && node.getNodeName().equals("corso")){
+                NodeList childNodes = node.getChildNodes();
+                if(role.equals("professore")){
+                    //controlla quali elementi del childnodes è un elemento professore
+                    for(int j=0;j<childNodes.getLength();j++){
+                        Node childNode=childNodes.item(j);
+                        if(childNode.getNodeType()==Node.ELEMENT_NODE && childNode.getNodeName().equals("professore")){
+                            NamedNodeMap n = childNode.getAttributes();
+                            if(n.getNamedItem("codice").getNodeValue().equals(cod)){
+                                System.out.println("fino al codice c'è");
+                                NodeList childNodesProf = childNode.getChildNodes();
+                                for(int k=0;k<childNodesProf.getLength();k++){
+                                    Node childNodeProf=childNodesProf.item(k);
+                                    if(childNodeProf.getNodeType()==Node.ELEMENT_NODE && childNodeProf.getNodeName().equals("password")){
+                                        System.out.println("password rilevate:"+childNodeProf.getTextContent());
+                                        if(childNodeProf.getTextContent().equals(password)){
+                                            return true;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }else if(role.equals("studente")){
+                    //controlla quali elementi del childnodes è un elemento studente
+                    for(int j=0;j<childNodes.getLength();j++){
+                        Node childNode=childNodes.item(j);
+                        if(childNode.getNodeType()==Node.ELEMENT_NODE && childNode.getNodeName().equals("studenti")){
+                            NodeList childNodesStud = childNode.getChildNodes();
+                            for(int k=0;k<childNodesStud.getLength();k++){
+                                Node childNodeStud=childNodesStud.item(k);
+                                NamedNodeMap n = childNodeStud.getAttributes();
+                                if(n.getNamedItem("matricola").getNodeValue().equals(cod)){
+                                    NodeList childNodesStud2 = childNodeStud.getChildNodes();
+                                    for(int l=0;l<childNodesStud2.getLength();l++){
+                                        Node childNodeStud2=childNodesStud2.item(l);
+                                        if(childNodeStud2.getNodeType()==Node.ELEMENT_NODE && childNodeStud2.getNodeName().equals("password")){
+                                            if(childNodeStud2.getTextContent().equals(password)){
+                                                return true;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 }
