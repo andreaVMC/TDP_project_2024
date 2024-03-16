@@ -9,6 +9,7 @@ import java.util.Scanner;
 public class client {
     static Socket socket;
     static int role=0;
+    static Scanner input = new Scanner(System.in);
     public static void main(String[] args) {
         try {
             // Connect to localhost on port 8080
@@ -80,7 +81,6 @@ public class client {
 
     private static int menu_selection() {
         @SuppressWarnings("resource")
-        Scanner input = new Scanner(System.in);
         String selection;
         do {
             selection = input.nextLine();
@@ -100,17 +100,39 @@ public class client {
                     sendString(selection);
                     return 2;
                 case "edit":
-                    sendString(selection);
-                    return 3;
+                    if(role!=0){
+                        sendString(selection);
+                        edit();
+                        separate();
+                        return 3;
+                    }else{
+                        System.out.println("non sei autenticato");
+                        sendString("none"); //string per continuare
+                        separate();
+                        return -1;
+                    }
                 case "delete":
                     sendString(selection);
                     return 4;
                 case "log_in":
-                    sendString(selection);
-                    log_in();
+                    if(role==0){
+                        sendString(selection);
+                        log_in();
+                        separate();
+                    }else{
+                        System.out.println("sei gia autenticato");
+                        sendString("none"); //string per continuare
+                    }
                     return 5;
                 case "log_out":
-                    sendString(selection);
+                    if(role!=0){
+                        sendString(selection);
+                        log_out();
+                    }else{
+                        System.out.println("non sei autenticato");
+                        sendString("none"); //string per continuare
+                    }
+                    separate();
                     return 6;
                 case "exit":
                     sendString(selection);
@@ -125,7 +147,6 @@ public class client {
     @SuppressWarnings("resource")
     private static void query() {
         separate();
-        Scanner input = new Scanner(System.in);
         String message;
         String box;
 
@@ -260,10 +281,14 @@ public class client {
 
     private static void log_in(){
         @SuppressWarnings("resource")
-        Scanner input = new Scanner(System.in);
-
+        String ruolo=null;
         System.out.println("ruolo:\nprofessore\nstudente");
-        String ruolo=input.nextLine();
+        do{
+            ruolo=input.nextLine();
+            if(!ruolo.equals("professore") && !ruolo.equals("studente")){
+                System.out.println("ruolo non valido");
+            }
+        }while(!ruolo.equals("professore") && !ruolo.equals("studente"));
         sendString(ruolo);
 
         System.out.println("matricola/codice:");
@@ -280,4 +305,174 @@ public class client {
             System.out.println("password o codice errati");
         }
     }
+
+    private static void log_out(){
+        role=0;
+        System.out.println("disconnesso");
+    }
+
+    private static void edit(){
+        selezioneElementiInteressati();
+        separate();
+        inserisciNuoviValori();
+        separate();
+        inserisciNuoviValori();
+        separate();
+        inserisciNuoviValori();
+    }
+
+    private static void selezioneElementiInteressati(){
+        separate();
+        String message;
+        String box;
+
+        System.out.println(recieveString()); //inserisci cod-corso
+        message = input.nextLine();
+        sendString(message);
+        
+        String[] campi = recieveString().split(",");
+        System.out.println("inserisci campi corso:"); //inserisci campi-corso
+        for(int i=0;i<campi.length;i++){
+            System.out.println(campi[i]);
+        }
+        System.out.println("\"exit\" to end");
+        message="";
+        boolean flag=false;
+        do {
+            box = input.nextLine();
+            if (!box.equals("exit")) {
+                for(int i=0;i<campi.length;i++){
+                    if(box.equals(campi[i])){
+                        flag=true;
+                        break;
+                    }
+                }
+                if(flag){
+                    message += box + ",";
+                    flag=false;
+                }else{
+                    System.out.println("campo inesistente");
+                }
+            }
+        }while (!box.equals("exit"));
+        if(message.equals("")) message="0";
+
+        sendString(message); //campi corso richiesti
+        campi=null;
+        /*----------- */
+        separate();
+        
+        System.out.println(recieveString()+"(no-need fore none)"); //inserisci cod-prof
+        message = input.nextLine();
+        if(message.equals("no-need")){
+            sendString("0");
+        }else{
+            sendString(message);
+
+            campi = recieveString().split(",");
+            System.out.println("inserisci campi prof:"); //inserisci campi-corso
+            for(int i=0;i<campi.length;i++){
+                System.out.println(campi[i]);
+            }
+            System.out.println("\"exit\" to end");
+
+
+            message="";
+            do {
+                box = input.nextLine();
+                if (!box.equals("exit")) {
+                    for(int i=0;i<campi.length;i++){
+                        if(box.equals(campi[i]) && flag==false){
+                            flag=true;
+                        }
+                    }
+                    if(flag){
+                        message += box + ",";
+                        flag=false;
+                    }else{
+                        System.out.println("campo inesistente");
+                    }
+                }
+            } while (!box.equals("exit"));
+            
+            if(message.equals("")){
+                message="0";
+            }
+            
+            sendString(message); //campi prof richiesti
+            campi=null;
+        }
+
+        //----------------
+        separate();
+
+        System.out.println(recieveString()+"(no-need fore none)"); //inserisci matricola studente
+        message = input.nextLine();
+        if(message.equals("no-need")){
+            sendString("0");
+        }else{
+            sendString(message);
+
+            campi = recieveString().split(",");
+            System.out.println("inserisci campi studente:"); //inserisci campi-studente
+            for(int i=0;i<campi.length;i++){
+                System.out.println(campi[i]);
+            }
+            System.out.println("\"exit\" to end");
+
+
+            message="";
+            do {
+                box = input.nextLine();
+                if (!box.equals("exit")) {
+                    for(int i=0;i<campi.length;i++){
+                        if(box.equals(campi[i])){
+                            flag=true;
+                            break;
+                        }
+                    }
+                    if(flag){
+                        message += box + ",";
+                        flag=false;
+                    }else{
+                        System.out.println("campo inesistente");
+                    }
+                }
+            } while (!box.equals("exit"));
+            if(message.equals("")) message="0";
+            sendString(message); //campi studente richiesti
+            campi=null;
+        }
+    }
+
+    @SuppressWarnings("resource")
+    private static void inserisciNuoviValori() {
+        try {
+            String box = recieveString();
+            if (!box.equals("stop")) {
+                System.out.println(box);
+                sendString("ok");
+                do {
+                    box = recieveString();
+                    if (!box.equals("stop")) {
+                        System.out.println(box);
+                        
+                        // Verifica se c'è un'ulteriore riga disponibile prima di leggerla
+                        if (input.hasNextLine()) {
+                            box = input.nextLine();
+                            sendString(box);
+                        } else {
+                            System.out.println("non ce un altra riga");
+                        }
+                    } else {
+                        System.out.println("stop");
+                    }
+                } while (!box.equals("stop"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return;
+    }
+
 }

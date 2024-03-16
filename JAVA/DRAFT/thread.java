@@ -17,12 +17,12 @@ import org.xml.sax.*;
 
 @SuppressWarnings("unused")
 public class thread extends Thread {
-    private String filePath;
-    private Socket client;
+    private static String filePath;
+    private static Socket client;
 
     public thread(String filePath, Socket client) throws IOException {
-        this.filePath = filePath;
-        this.client = client;
+        thread.filePath = filePath;
+        thread.client = client;
     }
 
     @Override
@@ -45,7 +45,7 @@ public class thread extends Thread {
 
     }
 
-    private boolean sendMessage(String message) {
+    private static boolean sendMessage(String message) {
         try {
             byte[] data = message.getBytes();
             OutputStream outputStream = client.getOutputStream();
@@ -82,9 +82,9 @@ public class thread extends Thread {
         }
     }
 
-    private String recieveString() {
+    private static String recieveString() {
         try {
-            InputStream inputStream = client.getInputStream();
+            InputStream inputStream = thread.client.getInputStream();
             byte[] data = new byte[1024];
             inputStream.read(data);
             return new String(data).trim(); //aggiunto trim per eliminare gli spazi bianchi -> controllare se funziona
@@ -106,6 +106,7 @@ public class thread extends Thread {
             } else if (selection.equals("append")) {
                 return 2;
             } else if (selection.equals("edit")) {
+                edit();
                 return 3;
             } else if (selection.equals("delete")) {
                 return 4;
@@ -121,13 +122,12 @@ public class thread extends Thread {
             } else if (selection.equals("exit")) {
                 return 0;
             }else if (selection.equals("none")) {
-                System.out.println("entered");
                 continue;
             }
         } while (true);
     }
 
-    private Element getRoot() {
+    private static Element getRoot() {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
@@ -238,7 +238,7 @@ public class thread extends Thread {
         return elements;
     }
 
-    private String getElementsNode(int select){ //restituisce tutti gli elementi di un nodo , 1=corso, 2=professore, 3=studente
+    private static String getElementsNode(int select){ //restituisce tutti gli elementi di un nodo , 1=corso, 2=professore, 3=studente
         Element root=getRoot();
         if (select==1){
             return "nome_corso,anno,crediti";
@@ -444,5 +444,81 @@ public class thread extends Thread {
             }
         }
         return false;
+    }
+
+
+    private static void edit(){
+        String codCorso = riceviCodici(1);
+        String[] campiCorso = riceviCampi(1).split(",");
+
+        String codProf = riceviCodici(2);
+        String[] campiProf=null;
+        if(!codProf.equals("0")){
+            campiProf = riceviCampi(2).split(",");
+        }
+
+        String codStudente = riceviCodici(3);
+        String[] campiStudente=null;
+        if(!codStudente.equals("0")){
+            campiStudente = riceviCampi(3).split(",");
+        }
+
+
+        String[] newCorso = null;
+        if(!campiCorso[0].equals("0")){
+            newCorso = new String[campiCorso.length];
+            sendMessage("Inserisci i nuovi valori per Corso:\n");
+            recieveString();
+            for(int i=0;i<campiCorso.length;i++){
+                sendMessage(campiCorso[i]+":");
+                newCorso[i]=recieveString();
+            }
+        }
+        sendMessage("stop");
+
+ 
+        String[] newProf = null;
+        if(campiProf!=null){
+            newProf = new String[campiProf.length];
+            sendMessage("Inserisci i nuovi valori per Professore:\n");
+            recieveString();
+            for(int i=0;i<campiProf.length;i++){
+                sendMessage(campiProf[i]+":");
+                newProf[i]=recieveString();
+            }
+        }
+        sendMessage("stop");
+
+        String[] newStudente = null;
+        if(campiStudente!=null){
+            newStudente = new String[campiStudente.length];
+            if(!campiStudente[0].equals("0")){
+                sendMessage("Inserisci i nuovi valori per Studente:\n");
+                recieveString();
+                for(int i=0;i<campiStudente.length;i++){
+                    sendMessage(campiStudente[i]+":");
+                    newStudente[i]=recieveString();
+                }
+            }
+        }
+        sendMessage("stop");
+
+        //update the xml file and save it
+    }
+
+    private static String riceviCodici(int option){
+        if(option==1){
+            sendMessage("Inserisci il codice del corso:\n");
+        }else if(option==2){
+            sendMessage("Inserisci il codice del professore:\n");
+        }else if(option==3){
+            sendMessage("Inserisci la matricola studente:\n");
+        }
+        return recieveString();
+    }
+
+    private static String riceviCampi(int option){
+        sendMessage(getElementsNode(option));
+        return recieveString();
     }
 }

@@ -41,14 +41,14 @@ Per domande o commenti, contattami all'indirizzo email [vaccaroandrea1227@gmail.
 - [x] Gestire client con thread.
 - [x] Creare menu nel Thread per gestire richieste client.
 - [ ] Aggiungere funzionalità query multi corso/prof/studente
-- [ ] Aggiungere controllo su campi richiesti da client (correttezza nominativi) e ripetitività dei campi
-- [ ] Creazione file richiesta del client (query).
+- [x] Aggiungere controllo su campi richiesti da client (correttezza nominativi) e ripetitività dei campi
+- [x] Creazione file richiesta del client (query).
 - [ ] implementazione append.
-- [ ] implementazione edit.
+- [x] implementazione edit.
 - [ ] implementazione delete.
-- [ ] implementare campo password nel file XML ed XSD. 
-- [ ] implementare metodo di autenticazione via codice e password controllati nei dati xml.
-- [ ] Invio e ricezione del file richiesta.
+- [x] implementare campo password nel file XML ed XSD. 
+- [x] implementare metodo di autenticazione via codice e password controllati nei dati xml.
+- [x] Invio e ricezione del file richiesta.
 - [ ] Interfaccia JavaSwing Server e Client.
 
 ----------------------------
@@ -85,3 +85,21 @@ Aggiornamenti di ciò che viene fatto al processo per mantenere la tracciabilit�
 - creata interfaccia di menu
 - create funzione per gestione di query (non complete) sul file xml -> da implementare richiesta di più corsi/professori/studenti
 - creata funzione per la scrittura di un file query.xml contente le informazioni richieste dal client
+
+## 13/03/2024
+
+- funzione di ricezione del file richiesta.xml lato client
+
+## 14/03/2024
+
+- implementazione del campo password nel file xml e validazione attraveso xsd
+- autenticazione professori attraverso implementazione della funzione di log_in e log_out con relativo controllo delle credenziali sul file xml
+
+## 15/03/2024
+
+- sviluppo della funzione di log_in con correzzione dei bug per garantire accesso anche ad utenti autenticati come studenti
+
+## 16/03/2024
+
+- sviluppo della funzione di edit e di relative funzioni appendice utili, per il trasferimento di informazioni in maniera da essere riutilizzabili per funzioni future
+- da terminare la funzione edit con relativa modifica dell'albero xml e salvataggio su file
