@@ -417,21 +417,22 @@ public class thread extends Thread {
                         }
                     }
                 }else if(role.equals("studente")){
-                    //controlla quali elementi del childnodes è un elemento studente
                     for(int j=0;j<childNodes.getLength();j++){
                         Node childNode=childNodes.item(j);
                         if(childNode.getNodeType()==Node.ELEMENT_NODE && childNode.getNodeName().equals("studenti")){
-                            NodeList childNodesStud = childNode.getChildNodes();
-                            for(int k=0;k<childNodesStud.getLength();k++){
-                                Node childNodeStud=childNodesStud.item(k);
-                                NamedNodeMap n = childNodeStud.getAttributes();
-                                if(n.getNamedItem("matricola").getNodeValue().equals(cod)){
-                                    NodeList childNodesStud2 = childNodeStud.getChildNodes();
-                                    for(int l=0;l<childNodesStud2.getLength();l++){
-                                        Node childNodeStud2=childNodesStud2.item(l);
-                                        if(childNodeStud2.getNodeType()==Node.ELEMENT_NODE && childNodeStud2.getNodeName().equals("password")){
-                                            if(childNodeStud2.getTextContent().equals(password)){
-                                                return true;
+                            NodeList childNodesStudenti = childNode.getChildNodes();
+                            for(int k=0;k<childNodesStudenti.getLength();k++){
+                                Node childNodeStudenti=childNodesStudenti.item(k);
+                                if(childNodeStudenti.getNodeType()==Node.ELEMENT_NODE && childNodeStudenti.getNodeName().equals("studente")){
+                                    NamedNodeMap n = childNodeStudenti.getAttributes();
+                                    if(n.getNamedItem("matricola").getNodeValue().equals(cod)){
+                                        NodeList childNodesStudente = childNodeStudenti.getChildNodes();
+                                        for(int l=0;l<childNodesStudente.getLength();l++){
+                                            Node childNodeStudente=childNodesStudente.item(l);
+                                            if(childNodeStudente.getNodeType()==Node.ELEMENT_NODE && childNodeStudente.getNodeName().equals("password")){
+                                                if(childNodeStudente.getTextContent().equals(password)){
+                                                    return true;
+                                                }
                                             }
                                         }
                                     }

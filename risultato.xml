@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <richiesta>
-     <corso codice="1">
-          <professore codice="1"/>
-          <studente matricola="123456"/>
-     </corso>
+     <corso codice="1"/>
 </richiesta>
