@@ -462,7 +462,7 @@ public class client {
                             box = input.nextLine();
                             sendString(box);
                         } else {
-                            System.out.println("non ce un altra riga");
+                            System.out.println("error");
                         }
                     } else {
                         System.out.println("stop");

@@ -504,6 +504,10 @@ public class thread extends Thread {
         sendMessage("stop");
 
         //update the xml file and save it
+
+        //fiche ci sono figli trova i campi corrispondenti ed aggiornali poi salva l'alabero xml in un file con il medesimo nome del file sorgente
+        
+
     }
 
     private static String riceviCodici(int option){
