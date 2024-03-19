@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <richiesta>
-     <corso codice="1"/>
+     <corso codice="1">
+          <studente matricola="123456">
+               <cognome>Vaccaro</cognome>
+               <email>andra@email.com</email>
+               <password>password</password>
+          </studente>
+     </corso>
 </richiesta>

@@ -315,9 +315,7 @@ public class client {
         selezioneElementiInteressati();
         separate();
         inserisciNuoviValori();
-        separate();
         inserisciNuoviValori();
-        separate();
         inserisciNuoviValori();
     }
 
@@ -468,7 +466,9 @@ public class client {
                         System.out.println("stop");
                     }
                 } while (!box.equals("stop"));
-            }
+                separate();
+            }  
+            sendString("ok"); //string di clock
         } catch (Exception e) {
             e.printStackTrace();
         }

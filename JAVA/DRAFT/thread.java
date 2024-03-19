@@ -475,7 +475,7 @@ public class thread extends Thread {
             }
         }
         sendMessage("stop");
-
+        recieveString();
  
         String[] newProf = null;
         if(campiProf!=null){
@@ -488,6 +488,7 @@ public class thread extends Thread {
             }
         }
         sendMessage("stop");
+        recieveString();
 
         String[] newStudente = null;
         if(campiStudente!=null){
@@ -502,12 +503,45 @@ public class thread extends Thread {
             }
         }
         sendMessage("stop");
+        recieveString();
 
         //update the xml file and save it
 
         //fiche ci sono figli trova i campi corrispondenti ed aggiornali poi salva l'alabero xml in un file con il medesimo nome del file sorgente
         
+        Element root = getRoot();
 
+        modificaNodi(root,codCorso,"0","0",campiCorso,newCorso);
+        modificaNodi(root,codCorso,codProf,"0",campiProf,newProf);
+        modificaNodi(root,codCorso,"0",codStudente,campiStudente,newStudente);
+
+        BufferedWriter writer;
+        try {
+            writer = new BufferedWriter(new FileWriter(new File(filePath)));
+            writer.write("");
+            writer.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        try {
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(root);
+            StreamResult result = new StreamResult(new File(filePath));
+            
+            // Imposta le proprietà di output per l'indentazione
+            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+            transformer.setOutputProperty(OutputKeys.INDENT, "no");
+            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "5");
+            transformer.transform(source, result);
+        } catch (TransformerException e) {
+            e.printStackTrace();
+        }
+        
+        
     }
 
     private static String riceviCodici(int option){
@@ -524,5 +558,96 @@ public class thread extends Thread {
     private static String riceviCampi(int option){
         sendMessage(getElementsNode(option));
         return recieveString();
+    }
+
+
+    private static void modificaNodi(Element root, String codCorso, String codProf, String matricola, String[] campo, String[] newVal){ //se un campo è uguale a 0 vuol dire che non è richiesto -> matricole e codice != 0
+        NodeList lista=root.getChildNodes();
+        Node corso=null;
+
+
+        for(int i=0; i<lista.getLength(); i++){
+            Node node=lista.item(i);
+            if(node.getNodeType()==Node.ELEMENT_NODE && node.getNodeName().equals("corso")){
+                NamedNodeMap n = node.getAttributes();
+                if(n.getNamedItem("codice").getNodeValue().equals(codCorso)){
+                    corso=node; //trovo il corso indicato
+                }
+            }
+        }
+
+        
+        if(corso==null){
+            System.out.println("corso non trovato");
+            return;
+        }
+        
+        if(codProf.equals("0") && matricola.equals("0") && campo!=null && newVal!=null){
+                for (int i = 0; i < campo.length; i++) {
+                    NodeList childNodes = corso.getChildNodes();
+                    for (int j = 0; j < childNodes.getLength(); j++) {
+                        Node childNode = childNodes.item(j);
+                        if (childNode.getNodeType() == Node.ELEMENT_NODE && childNode.getNodeName().equals(campo[i])) {
+                            childNode.setTextContent(newVal[i]);
+                        }
+                    }
+                }
+        }else if((!codProf.equals("0")) && matricola.equals("0") &&  campo!=null && newVal!=null){
+            lista=corso.getChildNodes();
+            Node prof=null;
+
+            for(int i=0; i<lista.getLength(); i++){
+                Node node=lista.item(i);
+                if(node.getNodeType()==Node.ELEMENT_NODE && node.getNodeName().equals("professore")){
+                    NamedNodeMap n = node.getAttributes();
+                    if(n.getNamedItem("codice").getNodeValue().equals(codCorso)){
+                        prof=node; //trovo il prof indicato
+                    }
+                }
+            }
+
+            for (int i = 0; i < campo.length; i++) {
+                NodeList childNodes = prof.getChildNodes();
+                for (int j = 0; j < childNodes.getLength(); j++) {
+                    Node childNode = childNodes.item(j);
+                    if (childNode.getNodeType() == Node.ELEMENT_NODE && childNode.getNodeName().equals(campo[i])) {
+                        childNode.setTextContent(newVal[i]);
+                    }
+                }
+            }
+
+        }else if((!matricola.equals("0")) && codProf.equals("0") &&  campo!=null && newVal!=null){
+            lista=corso.getChildNodes();
+            Node studente=null;
+
+            for(int i=0; i<lista.getLength(); i++){
+                Node node=lista.item(i);
+                if(node.getNodeType()==Node.ELEMENT_NODE && node.getNodeName().equals("studenti")){
+                    lista=node.getChildNodes();
+                    break;
+                }
+            }
+
+            for(int i=0; i<lista.getLength(); i++){
+                Node node=lista.item(i);
+                
+                if(node.getNodeType()==Node.ELEMENT_NODE && node.getNodeName().equals("studente")){
+                    NamedNodeMap n = node.getAttributes();
+                    if(n.getNamedItem("matricola").getNodeValue().equals(matricola)){
+                        studente=node; //trovo lo studente indicate
+                    }
+                }
+            }
+
+            for (int i = 0; i < campo.length; i++) {
+                NodeList childNodes = studente.getChildNodes();
+                for (int j = 0; j < childNodes.getLength(); j++) {
+                    Node childNode = childNodes.item(j);
+                    if (childNode.getNodeType() == Node.ELEMENT_NODE && childNode.getNodeName().equals(campo[i])) {
+                        childNode.setTextContent(newVal[i]);
+                    }
+                }
+            }
+        }
     }
 }

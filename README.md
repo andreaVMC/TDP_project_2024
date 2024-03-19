@@ -44,7 +44,7 @@ Per domande o commenti, contattami all'indirizzo email [vaccaroandrea1227@gmail.
 - [x] Aggiungere controllo su campi richiesti da client (correttezza nominativi) e ripetitività dei campi
 - [x] Creazione file richiesta del client (query).
 - [ ] implementazione append.
-- [ ] implementazione edit.
+- [X] implementazione edit.
 - [ ] implementazione delete.
 - [x] implementare campo password nel file XML ed XSD. 
 - [x] implementare metodo di autenticazione via codice e password controllati nei dati xml.
@@ -103,3 +103,8 @@ Aggiornamenti di ciò che viene fatto al processo per mantenere la tracciabilit�
 
 - sviluppo della funzione di edit e di relative funzioni appendice utili, per il trasferimento di informazioni in maniera da essere riutilizzabili per funzioni future
 - da terminare la funzione edit con relativa modifica dell'albero xml e salvataggio su file
+
+## 19/03/2024
+
+- completamento della funzione di edit e salvataggio dei dati su file xsd sorgente
+- [ ] Da modificare file xsd -> rendere obbligatorio il campo voto
