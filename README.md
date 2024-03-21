@@ -45,7 +45,7 @@ Per domande o commenti, contattami all'indirizzo email [vaccaroandrea1227@gmail.
 - [x] Creazione file richiesta del client (query).
 - [ ] implementazione append.
 - [X] implementazione edit.
-- [ ] implementazione delete.
+- [X] implementazione delete.
 - [x] implementare campo password nel file XML ed XSD. 
 - [x] implementare metodo di autenticazione via codice e password controllati nei dati xml.
 - [x] Invio e ricezione del file richiesta.

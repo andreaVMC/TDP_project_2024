@@ -109,6 +109,7 @@ public class thread extends Thread {
                 edit();
                 return 3;
             } else if (selection.equals("delete")) {
+                delete();
                 return 4;
             } else if (selection.equals("log_in")) {
                 if(log_in()){
@@ -648,6 +649,188 @@ public class thread extends Thread {
                     }
                 }
             }
+        }
+    }
+
+
+    private static void delete(){
+        String codCorso = riceviCodici(1);
+        String[] campiCorso = riceviCampi(1).split(",");
+
+        String codProf = riceviCodici(2);
+        String[] campiProf=null;
+        if(!codProf.equals("0")){
+            campiProf = riceviCampi(2).split(",");
+        }
+
+        String codStudente = riceviCodici(3);
+        String[] campiStudente=null;
+        if(!codStudente.equals("0")){
+            campiStudente = riceviCampi(3).split(",");
+        }
+
+        Element root = getRoot();
+
+        eliminaValori(root,codCorso,"0","0",campiCorso,campiProf,campiStudente);
+        eliminaValori(root,codCorso,codProf,"0",campiProf,campiCorso,campiStudente);
+        eliminaValori(root,codCorso,"0",codStudente,campiStudente,campiCorso,campiProf);
+
+        BufferedWriter writer;
+        try {
+            writer = new BufferedWriter(new FileWriter(new File(filePath)));
+            writer.write("");
+            writer.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        try {
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(root);
+            StreamResult result = new StreamResult(new File(filePath));
+            
+            // Imposta le proprietà di output per l'indentazione
+            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+            transformer.setOutputProperty(OutputKeys.INDENT, "no");
+            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "5");
+            transformer.transform(source, result);
+        } catch (TransformerException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void eliminaValori(Element root, String codCorso, String codProf, String matricola, String[] campo,String[] campo2,String[] campo3){ //se un campo è uguale a 0 vuol dire che non è richiesto -> matricole e codice != 0
+        NodeList lista=root.getChildNodes();
+        Node corso=null;
+        boolean flag=false;
+
+        
+        for(int i=0; i<lista.getLength(); i++){
+            Node node=lista.item(i);
+            if(node.getNodeType()==Node.ELEMENT_NODE && node.getNodeName().equals("corso")){
+                NamedNodeMap n = node.getAttributes();
+                if(n.getNamedItem("codice").getNodeValue().equals(codCorso)){
+                    corso=node; //trovo il corso indicato
+                }
+            }
+        }
+
+        
+        if(corso==null){
+            System.out.println("corso non trovato");
+            return;
+        }
+        
+        if(codProf.equals("0") && matricola.equals("0") && campo!=null){
+                for (int i = 0; i < campo.length; i++) {
+                    NodeList childNodes = corso.getChildNodes();
+                    for (int j = 0; j < childNodes.getLength(); j++) {
+                        Node childNode = childNodes.item(j);
+                        if (childNode.getNodeType() == Node.ELEMENT_NODE && childNode.getNodeName().equals(campo[i])) {
+                            childNode.setTextContent("");
+                        }
+                    }
+                }
+        }else if(codProf.equals("0") && matricola.equals("0") && campo==null && campo2==null && campo3==null){
+            corso.getParentNode().removeChild(corso);
+
+        }else if((!codProf.equals("0")) && matricola.equals("0") &&  campo!=null){
+            lista=corso.getChildNodes();
+            Node prof=null;
+
+            for(int i=0; i<lista.getLength(); i++){
+                Node node=lista.item(i);
+                if(node.getNodeType()==Node.ELEMENT_NODE && node.getNodeName().equals("professore")){
+                    NamedNodeMap n = node.getAttributes();
+                    if(n.getNamedItem("codice").getNodeValue().equals(codCorso)){
+                        prof=node; //trovo il prof indicato
+                    }
+                }
+            }
+
+            for (int i = 0; i < campo.length; i++) {
+                NodeList childNodes = prof.getChildNodes();
+                for (int j = 0; j < childNodes.getLength(); j++) {
+                    Node childNode = childNodes.item(j);
+                    if (childNode.getNodeType() == Node.ELEMENT_NODE && childNode.getNodeName().equals(campo[i])) {
+                        childNode.setTextContent("");
+                    }
+                }
+            }
+        }else if((!codProf.equals("0")) && matricola.equals("0") &&  campo==null){
+            lista=corso.getChildNodes();
+            Node prof=null;
+
+            for(int i=0; i<lista.getLength(); i++){
+                Node node=lista.item(i);
+                if(node.getNodeType()==Node.ELEMENT_NODE && node.getNodeName().equals("professore")){
+                    NamedNodeMap n = node.getAttributes();
+                    if(n.getNamedItem("codice").getNodeValue().equals(codCorso)){
+                        prof=node; //trovo il prof indicato
+                    }
+                }
+            }
+
+            prof.getParentNode().removeChild(prof);
+        }else if((!matricola.equals("0")) && codProf.equals("0") &&  campo!=null){
+            lista=corso.getChildNodes();
+            Node studente=null;
+
+            for(int i=0; i<lista.getLength(); i++){
+                Node node=lista.item(i);
+                if(node.getNodeType()==Node.ELEMENT_NODE && node.getNodeName().equals("studenti")){
+                    lista=node.getChildNodes();
+                    break;
+                }
+            }
+
+            for(int i=0; i<lista.getLength(); i++){
+                Node node=lista.item(i);
+                
+                if(node.getNodeType()==Node.ELEMENT_NODE && node.getNodeName().equals("studente")){
+                    NamedNodeMap n = node.getAttributes();
+                    if(n.getNamedItem("matricola").getNodeValue().equals(matricola)){
+                        studente=node; //trovo lo studente indicate
+                    }
+                }
+            }
+
+            for (int i = 0; i < campo.length; i++) {
+                NodeList childNodes = studente.getChildNodes();
+                for (int j = 0; j < childNodes.getLength(); j++) {
+                    Node childNode = childNodes.item(j);
+                    if (childNode.getNodeType() == Node.ELEMENT_NODE && childNode.getNodeName().equals(campo[i])) {
+                        childNode.setTextContent("");
+                    }
+                }
+            }
+        }else if((!matricola.equals("0")) && codProf.equals("0") &&  campo==null){
+            lista=corso.getChildNodes();
+            Node studente=null;
+
+            for(int i=0; i<lista.getLength(); i++){
+                Node node=lista.item(i);
+                if(node.getNodeType()==Node.ELEMENT_NODE && node.getNodeName().equals("studenti")){
+                    lista=node.getChildNodes();
+                    break;
+                }
+            }
+
+            for(int i=0; i<lista.getLength(); i++){
+                Node node=lista.item(i);
+                
+                if(node.getNodeType()==Node.ELEMENT_NODE && node.getNodeName().equals("studente")){
+                    NamedNodeMap n = node.getAttributes();
+                    if(n.getNamedItem("matricola").getNodeValue().equals(matricola)){
+                        studente=node; //trovo lo studente indicate
+                    }
+                }
+            }
+
+            studente.getParentNode().removeChild(studente);
         }
     }
 }

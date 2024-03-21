@@ -112,8 +112,16 @@ public class client {
                         return -1;
                     }
                 case "delete":
-                    sendString(selection);
-                    return 4;
+                    if(role!=0){
+                        sendString(selection);
+                        delete();
+                        return 4;
+                    }else{
+                        System.out.println("non sei autenticato");
+                        sendString("none"); //string per continuare
+                        separate();
+                        return -1;
+                    }
                 case "log_in":
                     if(role==0){
                         sendString(selection);
@@ -473,6 +481,12 @@ public class client {
             e.printStackTrace();
         }
         return;
+    }
+
+    private static void delete(){
+        System.out.println("funzione delete, non inserire nessun campo per eliminare l'intero elemento");
+        selezioneElementiInteressati();
+        separate();
     }
 
 }
