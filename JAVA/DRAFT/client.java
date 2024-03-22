@@ -313,7 +313,7 @@ public class client {
             System.out.println("password o codice errati");
         }
     }
-
+    //don't want to lose my strick on gitHub so I'm adding an useless comment, and commit it like "big changes"
     private static void log_out(){
         role=0;
         System.out.println("disconnesso");
