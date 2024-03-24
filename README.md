@@ -50,6 +50,7 @@ Per domande o commenti, contattami all'indirizzo email [vaccaroandrea1227@gmail.
 - [x] implementare metodo di autenticazione via codice e password controllati nei dati xml.
 - [x] Invio e ricezione del file richiesta.
 - [ ] Interfaccia JavaSwing Server e Client.
+- [X] Aggiornare la presentazione.
 
 ----------------------------
 
