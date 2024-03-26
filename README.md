@@ -49,7 +49,7 @@ Per domande o commenti, contattami all'indirizzo email [vaccaroandrea1227@gmail.
 - [x] implementare campo password nel file XML ed XSD. 
 - [x] implementare metodo di autenticazione via codice e password controllati nei dati xml.
 - [x] Invio e ricezione del file richiesta.
-- [ ] Interfaccia JavaSwing Server e Client.
+- [ ] Interfaccia JavaSwing lato Client.
 - [ ] Aggiornare la presentazione.
 
 ----------------------------
