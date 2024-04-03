@@ -3,14 +3,6 @@
         <nome_corso>Informatica 1</nome_corso>
         <anno>12345</anno>
         <crediti>180</crediti>
-        <professore codice="1">
-            <nome>Giuseppe</nome>
-            <cognome>De Marco</cognome>
-            <materia>Programmazione</materia>
-            <data_nascita>1970-01-01</data_nascita>
-            <email>prof@ccc.it</email>
-            <password>123456</password>
-        </professore>
         <studenti>
             <studente matricola="123456">
                 <nome>Andrea</nome>
@@ -31,9 +23,19 @@
                 <sesso>F</sesso>
                 <email>giovanna.bianchi@gmail.com</email>
                 <stato_corso>terminato</stato_corso>
-                <voto>22</voto> 
+                <voto>22</voto>
                 <password>123456</password>
             </studente>
+            
         </studenti>
+        <professore codice="1">
+            <nome>Giuseppe</nome>
+            <cognome>De Marco</cognome>
+            <materia>Programmazione</materia>
+            <data_nascita>1970-01-01</data_nascita>
+            <email>prof@ccc.it</email>
+            <password>123456</password>
+        </professore>
+        
     </corso>
 </Universita>

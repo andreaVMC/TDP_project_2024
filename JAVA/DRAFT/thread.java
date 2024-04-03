@@ -11,6 +11,9 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.*;
 import org.xml.sax.*;
@@ -104,6 +107,7 @@ public class thread extends Thread {
                 query();
                 return 1;
             } else if (selection.equals("append")) {
+                append();
                 return 2;
             } else if (selection.equals("edit")) {
                 edit();
@@ -662,11 +666,17 @@ public class thread extends Thread {
         if(!codProf.equals("0")){
             campiProf = riceviCampi(2).split(",");
         }
+        if(campiProf!=null && campiProf[0].equals("0")){
+            campiProf=null;
+        }
 
         String codStudente = riceviCodici(3);
         String[] campiStudente=null;
         if(!codStudente.equals("0")){
             campiStudente = riceviCampi(3).split(",");
+        }
+        if(campiStudente!=null && campiStudente[0].equals("0")){
+            campiStudente=null;
         }
 
         Element root = getRoot();
@@ -745,7 +755,7 @@ public class thread extends Thread {
                 Node node=lista.item(i);
                 if(node.getNodeType()==Node.ELEMENT_NODE && node.getNodeName().equals("professore")){
                     NamedNodeMap n = node.getAttributes();
-                    if(n.getNamedItem("codice").getNodeValue().equals(codCorso)){
+                    if(n.getNamedItem("codice").getNodeValue().equals(codProf)){
                         prof=node; //trovo il prof indicato
                     }
                 }
@@ -768,12 +778,12 @@ public class thread extends Thread {
                 Node node=lista.item(i);
                 if(node.getNodeType()==Node.ELEMENT_NODE && node.getNodeName().equals("professore")){
                     NamedNodeMap n = node.getAttributes();
-                    if(n.getNamedItem("codice").getNodeValue().equals(codCorso)){
+                    if(n.getNamedItem("codice").getNodeValue().equals(codProf)){
                         prof=node; //trovo il prof indicato
                     }
                 }
             }
-
+            System.out.println("qua");
             prof.getParentNode().removeChild(prof);
         }else if((!matricola.equals("0")) && codProf.equals("0") &&  campo!=null){
             lista=corso.getChildNodes();
@@ -831,6 +841,203 @@ public class thread extends Thread {
             }
 
             studente.getParentNode().removeChild(studente);
+        }
+    }
+
+    static void append(){
+        String codCorso = riceviCodici(1);
+        sendMessage("cosa aggiungere:\nprofessore\nstudente\n");
+        String selection = recieveString();
+
+        if(selection.equals("studente")){
+            sendMessage("inserire i senguenti dati:");
+            String[] campi = getElementsNode(3).split(",");
+            String[] valori = new String[campi.length];
+            for(int i=0;i<campi.length;i++){
+                sendMessage(campi[i]+":");
+                valori[i] = recieveString();
+            }
+            sendMessage("stop");
+            addElement(codCorso, valori, 1);
+        }else{
+            sendMessage("inserire i senguenti dati:");
+            String[] campi = getElementsNode(2).split(",");
+            String[] valori = new String[campi.length];
+            for(int i=0;i<campi.length;i++){
+                sendMessage(campi[i]+":");
+                valori[i] = recieveString();
+            }
+            sendMessage("stop");
+            addElement(codCorso, valori, 2);
+        }
+        sendMessage("ok");
+        recieveString();
+        return;
+    }
+
+    static void addElement(String codCorso,String[] dati, int option){
+        int id = foundNextId(codCorso, option);
+        System.out.println("id: "+id);
+
+        Element root = getRoot();
+        NodeList lista=root.getChildNodes();
+        Node corso=null;
+
+        for(int i=0; i<lista.getLength(); i++){
+            Node node=lista.item(i);
+            if(node.getNodeType()==Node.ELEMENT_NODE && node.getNodeName().equals("corso")){
+                NamedNodeMap n = node.getAttributes();
+                if(n.getNamedItem("codice").getNodeValue().equals(codCorso)){
+                    corso=node; //trovo il corso indicato
+                }
+            }
+        }
+
+        if(corso==null){
+            System.out.println("corso non trovato");
+            return;
+        }
+
+        if(option==1){
+            Node studenti=null;
+
+            for(int i=0; i<corso.getChildNodes().getLength(); i++){
+                Node node=corso.getChildNodes().item(i);
+                if(node.getNodeType()==Node.ELEMENT_NODE && node.getNodeName().equals("studenti")){
+                    studenti=node; //trovo il nodo studenti
+                }
+            }
+
+            Element studente = root.getOwnerDocument().createElement("studente");
+            studente.setAttribute("matricola", String.valueOf(id));
+            for(int i=0;i<dati.length;i++){
+                Element campo = root.getOwnerDocument().createElement(getElementsNode(3).split(",")[i]);
+                campo.appendChild(root.getOwnerDocument().createTextNode(dati[i]));
+                studente.appendChild(campo);
+            }
+            studenti.appendChild(studente);
+        }else if(option==2){
+            Element professore = root.getOwnerDocument().createElement("professore");
+            professore.setAttribute("codice", String.valueOf(id));
+            for(int i=0;i<dati.length;i++){
+                Element campo = root.getOwnerDocument().createElement(getElementsNode(2).split(",")[i]);
+                campo.appendChild(root.getOwnerDocument().createTextNode(dati[i]));
+                professore.appendChild(campo);
+            }
+            corso.appendChild(professore);
+        }
+
+
+        BufferedWriter writer;
+        try {
+            writer = new BufferedWriter(new FileWriter(new File(filePath)));
+            writer.write("");
+            writer.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        try {
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(root);
+            StreamResult result = new StreamResult(new File(filePath));
+            
+            // Imposta le proprietà di output per l'indentazione
+            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "5");
+            transformer.transform(source, result);
+        } catch (TransformerException e) {
+            e.printStackTrace();
+        }
+
+        removeEmptyLines(filePath);
+    }
+
+    static int foundNextId(String codCorso,int option){
+        int id=0;
+        Element root = getRoot();
+        NodeList lista=root.getChildNodes();
+        Node corso=null;
+
+        for(int i=0; i<lista.getLength(); i++){
+            Node node=lista.item(i);
+            if(node.getNodeType()==Node.ELEMENT_NODE && node.getNodeName().equals("corso")){
+                NamedNodeMap n = node.getAttributes();
+                if(n.getNamedItem("codice").getNodeValue().equals(codCorso)){
+                    corso=node; //trovo il corso indicato
+                }
+            }
+        }
+
+        lista=corso.getChildNodes();
+        if(option==1){
+            Node studente=null;
+
+            for(int i=0; i<lista.getLength(); i++){
+                Node node=lista.item(i);
+                if(node.getNodeType()==Node.ELEMENT_NODE && node.getNodeName().equals("studenti")){
+                    lista=node.getChildNodes();
+                    break;
+                }
+            }
+
+            for(int i=0; i<lista.getLength(); i++){
+                Node node=lista.item(i);
+                
+                if(node.getNodeType()==Node.ELEMENT_NODE && node.getNodeName().equals("studente")){
+                    NamedNodeMap n = node.getAttributes();
+                    if(Integer.parseInt(n.getNamedItem("matricola").getNodeValue())>id){
+                        id = Integer.parseInt(n.getNamedItem("matricola").getNodeValue());
+                    }
+                }
+            }
+        }else if(option==2){
+            Node prof=null;
+
+            for(int i=0; i<lista.getLength(); i++){
+                Node node=lista.item(i);
+                if(node.getNodeType()==Node.ELEMENT_NODE && node.getNodeName().equals("professore")){
+                    NamedNodeMap n = node.getAttributes();
+                    if(Integer.parseInt(n.getNamedItem("codice").getNodeValue())>id){
+                        id=Integer.parseInt(n.getNamedItem("codice").getNodeValue());
+                    }
+                }
+            }
+        }
+        return id+1;
+    }
+
+
+    public static void removeEmptyLines(String filePath) {
+        try {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document doc = builder.parse(new File(filePath));
+            doc.getDocumentElement().normalize();
+
+            XPath xPath = XPathFactory.newInstance().newXPath();
+            NodeList nodeList = (NodeList) xPath.evaluate("//text()[normalize-space()='']", doc, XPathConstants.NODESET);
+
+            for (int i = 0; i < nodeList.getLength(); ++i) {
+                Node node = nodeList.item(i);
+                node.getParentNode().removeChild(node);
+            }
+
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(new File(filePath));
+            transformer.transform(source, result);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

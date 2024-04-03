@@ -40,10 +40,9 @@ Per domande o commenti, contattami all'indirizzo email [vaccaroandrea1227@gmail.
 - [x] Server e Client TCP ed inviare file xml al client.
 - [x] Gestire client con thread.
 - [x] Creare menu nel Thread per gestire richieste client.
-- [ ] Aggiungere funzionalità query multi corso/prof/studente
 - [x] Aggiungere controllo su campi richiesti da client (correttezza nominativi) e ripetitività dei campi
 - [x] Creazione file richiesta del client (query).
-- [ ] implementazione append.
+- [X] implementazione append.
 - [X] implementazione edit.
 - [X] implementazione delete.
 - [x] implementare campo password nel file XML ed XSD. 
@@ -108,4 +107,13 @@ Aggiornamenti di ciò che viene fatto al processo per mantenere la tracciabilit�
 ## 19/03/2024
 
 - completamento della funzione di edit e salvataggio dei dati su file xsd sorgente
-- [ ] Da modificare file xsd -> rendere obbligatorio il campo voto
+- [X] Da modificare file xsd -> rendere obbligatorio il campo voto
+
+## 22-30/03/2024
+
+- aggiornamenti minori per risoluzione bug di codice
+
+## 03/04/2024
+
+- sviluppo funzione append
+- risolto bug in funzione delete

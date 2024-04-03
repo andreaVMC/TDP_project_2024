@@ -97,8 +97,16 @@ public class client {
                         return -1;
                     }
                 case "append":
-                    sendString(selection);
-                    return 2;
+                    if(role!=0){
+                        sendString(selection);
+                        append();
+                        return 2;
+                    }else{
+                        System.out.println("non sei autenticato");
+                        sendString("none"); //string per continuare
+                        separate();
+                        return -1;
+                    }
                 case "edit":
                     if(role!=0){
                         sendString(selection);
@@ -489,4 +497,39 @@ public class client {
         separate();
     }
 
+    private static void append(){
+        separate();
+        System.out.println(recieveString());
+        sendString(input.nextLine());
+        System.out.println(recieveString());
+        String message;
+        do{
+            message=input.nextLine();
+            if(!message.equals("studente") && !message.equals("professore")){
+                System.out.println("inserimento non valido");
+            }
+        }while(!message.equals("studente") && !message.equals("professore"));
+        sendString(message);
+
+        System.out.println(recieveString());
+        
+        do{
+            message=recieveString();
+            if(!message.equals("stop")){
+                System.out.println(message);
+                message=input.nextLine();
+                sendString(message);
+            }
+        }while(!message.equals("stop"));
+
+        if(recieveString().equals("ok")){
+            System.out.println("dati inseriti");
+        }else{
+            System.out.println("errore");
+        }
+
+        sendString("time");
+
+        return;
+    }
 }
